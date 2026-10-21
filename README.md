@@ -21,6 +21,10 @@ GitHub Actions は混雑時に数分〜十数分遅れることがあります�
 - `LINE_CHANNEL_ACCESS_TOKEN`：LINEのチャネルアクセストークン（長期）
 - `LINE_USER_ID`：自分のユーザーID（`U` で始まる文字列）
 
+## LINEに届くかのテスト
+
+GitHubの「Actions」→「LINE送信テスト」→「Run workflow」で、テストメッセージを1通送れます。
+
 ## 手元でのテスト（LINEには送りません）
 
 ```
