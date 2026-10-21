@@ -1,0 +1,29 @@
+{
+  "artists": {
+    "humbreaders": {
+      "seen": [],
+      "fail_count": 1
+    },
+    "sleeping_rices": {
+      "seen": [],
+      "fail_count": 1
+    },
+    "zookaraderu": {
+      "seen": [
+        "https://gooutzoo.com/?p=9771",
+        "https://gooutzoo.com/?p=9758",
+        "https://gooutzoo.com/?p=9716",
+        "https://gooutzoo.com/?p=9754",
+        "https://gooutzoo.com/?p=9717",
+        "https://gooutzoo.com/?p=9704",
+        "https://gooutzoo.com/?p=9633",
+        "https://gooutzoo.com/?p=9623",
+        "https://gooutzoo.com/?p=9614",
+        "https://gooutzoo.com/?p=9584"
+      ],
+      "fail_count": 0,
+      "etag": "\"d6ed9ce2820c5511cb8a8c17750261c3\"",
+      "last_modified": "Tue, 13 Oct 2026 09:00:42 GMT"
+    }
+  }
+}
