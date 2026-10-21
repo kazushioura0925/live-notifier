@@ -1,0 +1,51 @@
+# 新着チェック：1日4回、公式サイトのRSSを確認してLINEに通知する
+name: 新着チェック
+
+on:
+  schedule:
+    # GitHubの時刻はUTC（日本時間 - 9時間）。混雑する「0分ちょうど」を避けて17分にしています
+    # 日本時間 7:17 / 12:17 / 18:17 / 22:17
+    - cron: "17 22,3,9,13 * * *"
+  workflow_dispatch: # GitHubの画面から手動で実行するためのボタン
+
+# 新着チェックとリマインドが同時に記録ファイルを書き換えないよう、順番待ちにする
+concurrency:
+  group: live-notifier-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write # 記録ファイル（data/）を保存するため
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: 新着をチェックしてLINEに通知
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python check_news.py
+
+      - name: 記録ファイルを保存
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p data
+          git add data/
+          if git diff --cached --quiet; then
+            echo "記録に変更なし"
+          else
+            git commit -m "新着チェックの記録を更新"
+            git pull --rebase
+            git push
+          fi

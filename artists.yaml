@@ -1,0 +1,37 @@
+# ===== ライブ情報通知ツールの設定ファイル =====
+# アーティストを追加するときは、下の「- id: ...」のかたまりをコピーして書き換えてください。
+# 削除するときは、そのかたまりを消すか、enabled: false にしてください。
+#
+#   id       : 半角英数字の識別名（記録ファイルで使うので、一度決めたら変えない）
+#   name     : 通知に表示する名前
+#   site     : 公式サイトのトップページ
+#   feed     : 新着を確認するRSSのURL（公式サイトの「/feed/」など）
+#   enabled  : true = 監視する / false = 一時的に監視しない
+
+artists:
+  - id: humbreaders
+    name: ハンブレッダーズ
+    site: https://humbreaders.com/
+    feed: https://humbreaders.com/feed/
+    enabled: true
+
+  - id: sleeping_rices
+    name: リュックと添い寝ごはん
+    site: https://sleeping-rices.com/
+    feed: https://sleeping-rices.com/news/feed/
+    enabled: true
+
+  - id: zookaraderu
+    name: ズーカラデル
+    site: https://gooutzoo.com/
+    feed: https://gooutzoo.com/feed/
+    enabled: true
+
+# ===== 共通の設定 =====
+settings:
+  # true = ライブ・チケット関連の記事だけ通知する / false = すべての新着を通知する
+  live_only: true
+  # サイトへのアクセスの間隔（秒）。サイトに負担をかけないための待ち時間
+  wait_seconds: 3
+  # アクセス時に名乗る名前（サイト管理者が見たときに分かるように）
+  user_agent: "LiveNotifier/1.0 (personal fan notification bot)"
