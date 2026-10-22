@@ -19,10 +19,11 @@
     },
     "sleeping_rices": {
       "seen": [],
-      "fail_count": 3
+      "fail_count": 4
     },
     "zookaraderu": {
       "seen": [
+        "https://gooutzoo.com/?p=9816",
         "https://gooutzoo.com/?p=9771",
         "https://gooutzoo.com/?p=9758",
         "https://gooutzoo.com/?p=9716",
@@ -35,8 +36,8 @@
         "https://gooutzoo.com/?p=9584"
       ],
       "fail_count": 0,
-      "etag": "\"d6ed9ce2820c5511cb8a8c17750261c3\"",
-      "last_modified": "Tue, 13 Oct 2026 09:00:42 GMT"
+      "etag": "\"ba36cde9d8be84fb3ccdf40873ac18b8\"",
+      "last_modified": "Thu, 22 Oct 2026 09:00:23 GMT"
     }
   }
 }
