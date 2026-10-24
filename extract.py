@@ -36,7 +36,7 @@ URL_RE = re.compile(r"https?://\S+")
 # チケット受付を表す言葉
 SALE_RE = re.compile(r"受付|先行|一般発売|一般販売|販売開始|発売開始|抽選|先着|プレリク|チケット発売")
 # 見出しがチケットの話題かどうか
-TICKET_HEADING_RE = re.compile(r"チケット|先行|発売|販売|受付|抽選|プレイガイド|一般|先着|プレリク")
+TICKET_HEADING_RE = re.compile(r"チケット|先行|発売|販売|受付|抽選|プレイガイド|一般|先着|プレリク|申し?込")
 # チケット受付開始ではないもの（結果発表・入金期限・グッズなど）
 NOT_SALE_RE = re.compile(r"結果|当落|抽選日|入金|支払|発券|引換|引き換え|グッズ|GOODS|商品|メンテナンス|リセール|終了|締切|〆切")
 # 見出しの書き出しによく使われる記号
@@ -44,7 +44,7 @@ HEADING_MARKS = "■□▼▽●◆◇【<〈《[＜"
 # 公演日の項目名
 PERF_LABEL_RE = re.compile(r"^[■●◆・\s]*(?:日時|日程|公演日|開催日|日付)\s*[:：]?\s*")
 VENUE_LABEL_RE = re.compile(r"^[■●◆・\s]*(?:会場|場所)\s*[:：]\s*(?P<v>.+)")
-NOT_VENUE_RE = re.compile(r"開場|開演|OPEN|START|料金|円|¥|チケット|出演|※|http|受付|問い?合|発売")
+NOT_VENUE_RE = re.compile(r"開場|開演|OPEN|START|料金|円|¥|チケット|出演|※|http|受付|問い?合|発売|申し?込|時間", re.I)
 # 会場名らしさ（日付の次の行を会場とみなすかどうかの判断に使う）
 VENUE_HINT_RE = re.compile(
     r"・|ホール|HALL|PIT|Zepp|会館|LIVE ?HOUSE|ライブハウス|CLUB|QUATTRO|劇場|アリーナ|ARENA|ドーム|DOME"
@@ -56,10 +56,11 @@ LIVE_RE = re.compile(r"ライブ|LIVE|公演|ツアー|TOUR|出演|開催|チケ
 NOT_LIVE_TITLE_RE = re.compile(r"グッズ|GOODS|メディア|メンテナンス|ステッカー|リリース", re.I)
 # グッズ等の言葉があっても、これがあればライブ情報とみなす（例：「リリースツアー開催決定」）
 STRONG_LIVE_TITLE_RE = re.compile(r"公演|出演|チケット|開催|ワンマン")
-# 記事タイトルから受付の種類を読み取る
-TITLE_SALE_LABEL_RE = re.compile(
-    r"(ファンクラブ(?:会員)?(?:チケット)?(?:最速)?先行|FC(?:会員)?(?:最速)?先行"
-    r"|オフィシャル(?:HP|二次|最速)?先行|プレイガイド(?:最速)?先行|プレリクエスト先行|一般発売|先着販売)"
+# 受付の種類の呼び方（本文やタイトルから読み取る）
+SALE_LABEL_RE = re.compile(
+    r"(ファンクラブ(?:会員)?(?:限定)?(?:チケット)?(?:最速)?先行|FC(?:会員)?(?:最速)?先行"
+    r"|オフィシャル(?:HP|二次|最速)?先行(?: ?\d次)?|プレイガイド(?:最速)?先行|プレリクエスト先行"
+    r"|(?:最速)?先着先行|U-\d+チケット先行(?: ?\d次)?|一般発売|先着販売)"
 )
 
 
@@ -75,13 +76,14 @@ def html_to_lines(html):
         tag.insert_after("\n")
     text = unicodedata.normalize("NFKC", soup.get_text(""))
     lines = [re.sub(r"\s+", " ", line).strip() for line in text.split("\n")]
-    return [line for line in lines if line]
+    # WordPressが記事の最後に自動で付ける「The post ○○ appeared first on …」の行は除く
+    return [line for line in lines if line and not (line.startswith("The post ") and "appeared first on" in line)]
 
 
 def find_datetimes(line, base):
     """1行の中の日付をすべて見つける。年が書かれていなければ記事の日付から推測する。
 
-    戻り値: [(datetime, 時刻が書かれていたか, 日付の開始位置)] のリスト
+    戻り値: [(datetime, 時刻が書かれていたか, 日付の開始位置, 日付・時刻の終了位置)] のリスト
     """
     results = []
     for m in DATE_RE.finditer(line):
@@ -102,10 +104,16 @@ def find_datetimes(line, base):
         if t:
             minute = int(t.group("mi") or t.group("mi2") or 0)
             dt = datetime(d.year, d.month, d.day, int(t.group("h")), minute, tzinfo=JST)
-            results.append((dt, True, m.start()))
+            results.append((dt, True, m.start(), t.end()))
         else:
-            results.append((datetime(d.year, d.month, d.day, tzinfo=JST), False, m.start()))
+            results.append((datetime(d.year, d.month, d.day, tzinfo=JST), False, m.start(), m.end()))
     return results
+
+
+def is_end_date(line, found):
+    """「〜10/19(月)23:59まで」のような、受付の終了日時かどうか。"""
+    before = line[:found[2]].rstrip()
+    return bool(re.match(r"\s*(?:まで|迄)", line[found[3]:])) or before.endswith(("~", "〜"))
 
 
 def is_heading(line):
@@ -121,7 +129,8 @@ def clean_label(line):
 
 
 def is_generic_label(label):
-    return label is None or bool(re.fullmatch(r"(?:チケット)?(?:情報|申込|申し込み|詳細|受付期間|受付|チケット)?", label or ""))
+    """「チケット情報」「お申し込みはこちら」のように、受付の種類が分からない見出しかどうか。"""
+    return label is None or not re.search(r"先行|発売|販売|先着|抽選|プレリク|FC|ファンクラブ", label)
 
 
 def extract_title(lines, article_title):
@@ -132,10 +141,13 @@ def extract_title(lines, article_title):
             return m.group(1).strip()
     t = unicodedata.normalize("NFKC", article_title)
     t = re.sub(r"[”“\"′″]", "", t)
+    # 「本日10月17日(土)10:00より」のような日時の部分を取り除く
+    t = DATE_RE.sub("", t)
+    t = re.sub(r"本日|\d{1,2}:\d{2}\s*[~〜]?|より", "", t)
     t = re.sub(r"\s*(?:への)?(?:出演|開催|追加公演|追加|公演)?(?:決定|発表|公開)[!！]*.*$", "", t)
     # 「Officialチケット2次先行受付開始!」のような受付の案内部分を取り除く
     shorter = re.sub(r"\s*(?:Official|オフィシャル|ファンクラブ|FC)?\s*(?:会員)?\s*(?:チケット)?\s*(?:\d次)?(?:最速)?"
-                     r"(?:先行|一般発売|受付|チケット).*$", "", t)
+                     r"(?:先行|一般発売|受付|チケット|プレリクエスト|プレイガイド).*$", "", t)
     if len(shorter) >= 4:
         t = shorter
     t = re.sub(r"[がの、]$", "", t.strip())
@@ -147,7 +159,7 @@ def extract_sales(lines, base, article_title):
     sales = []
     section_label = None
     in_ticket = False
-    title_label_m = TITLE_SALE_LABEL_RE.search(unicodedata.normalize("NFKC", article_title))
+    title_label_m = SALE_LABEL_RE.search(unicodedata.normalize("NFKC", article_title))
     title_label = title_label_m.group(1) if title_label_m else None
 
     for i, raw in enumerate(lines):
@@ -157,7 +169,9 @@ def extract_sales(lines, base, article_title):
         dts = find_datetimes(line, base)
 
         # 見出しなら、チケットの話題が始まったか終わったかを判断
-        if is_heading(line) or (len(line) <= 25 and SALE_RE.search(line) and not dts):
+        short_heading = (len(line) <= 20 and SALE_RE.search(line) and not dts
+                         and not re.search(r"[。!！]|ます|ました|です", line))
+        if is_heading(line) or short_heading:
             if TICKET_HEADING_RE.search(line) and not NOT_SALE_RE.search(line):
                 in_ticket = True
                 section_label = clean_label(line)
@@ -174,6 +188,8 @@ def extract_sales(lines, base, article_title):
                 continue
             line = line[km.start():]
             dts = find_datetimes(line, base)
+        # 終了日時（「〜10/19(月)23:59まで」など）は受付開始ではないので除く
+        dts = [d for d in dts if not is_end_date(line, d)]
         # チケットの見出しの下で、日付から始まる行も受付日時とみなす（「■一般発売」の次の行が日付だけ、など）
         starts_with_date = bool(dts) and dts[0][2] <= 2
         is_sale_line = SALE_RE.search(line) or (
@@ -187,25 +203,34 @@ def extract_sales(lines, base, article_title):
                 nxt = URL_RE.sub("", nxt)
                 if is_heading(nxt):
                     break
-                dts = find_datetimes(nxt, base)
+                dts = [d for d in find_datetimes(nxt, base) if not is_end_date(nxt, d)]
                 if dts:
                     break
         if not dts:
             continue
 
-        start, time_known, _ = dts[0]
+        start, time_known = dts[0][:2]
         label = section_label
         if is_generic_label(label):
-            m = re.search(r"([^\s:：]*(?:先行|一般発売|一般販売|先着販売|プレリクエスト)[^\s:：]*)", line)
-            label = clean_label(m.group(1)) if m else (title_label or "チケット受付")
+            # その行か、すぐ後の行（「・オフィシャル先行 4次 ¥8,000」など）から受付の種類を探す
+            label = None
+            for nxt in [line] + lines[i + 1:i + 4]:
+                if nxt is not line and is_heading(nxt):
+                    break
+                m = SALE_LABEL_RE.search(nxt)
+                if m:
+                    label = m.group(1)
+                    break
+            label = label or title_label or "チケット受付"
         if "先着" in line and "先着" not in label:
             label += "（先着）"
         sales.append({"label": label, "start": start, "time_known": time_known})
 
-    # 同じものを重複して拾わないようにする
+    # 同じ日時を重複して拾った場合は、受付の種類が分かっている方を残す
     unique = {}
     for s in sales:
-        unique.setdefault((s["label"], s["start"]), s)
+        if s["start"] not in unique or unique[s["start"]]["label"] == "チケット受付":
+            unique[s["start"]] = s
     return list(unique.values())
 
 
@@ -214,7 +239,8 @@ def venue_from_nite(line):
     m = re.search(r"([^、。,]+?)にて", line)
     if not m:
         return None
-    venue = re.split(r"に|、", m.group(1))[-1].strip(" 「」")
+    venue = re.split(r"に|、", m.group(1))[-1]
+    venue = DATE_RE.sub("", venue).strip(" 「」")
     return venue or None
 
 
@@ -261,7 +287,9 @@ def extract_performances(lines, base):
                     break
                 if is_heading(nxt) or find_datetimes(nxt, base):
                     break
-                if not labeled and len(nxt) <= 40 and not NOT_VENUE_RE.search(nxt) and VENUE_HINT_RE.search(nxt):
+                # 日付だけの行の次の行は会場名とみなす。それ以外は会場名らしい言葉があるときだけ
+                if (not labeled and len(nxt) <= 40 and not NOT_VENUE_RE.search(nxt)
+                        and (not rest or VENUE_HINT_RE.search(nxt))):
                     venue = nxt
                     break
         perfs.append({"date": dts[0][0], "venue": venue.strip() if venue else None})
@@ -280,9 +308,14 @@ def extract_performances(lines, base):
         venue = next((p["venue"] for p in perfs if p["venue"]), None)
         perfs = [{"date": d, "venue": venue} for d in appear_dates]
 
+    # 同じ日の公演が「会場あり」と「会場不明」で重複したら、会場ありの方を残す
     unique = {}
     for p in perfs:
-        unique.setdefault((p["date"], p["venue"]), p)
+        key = p["date"]
+        if key not in unique or (unique[key]["venue"] is None and p["venue"]):
+            unique[key] = p
+        elif p["venue"] and unique[key]["venue"] and p["venue"] != unique[key]["venue"]:
+            unique[(key, p["venue"])] = p
     return list(unique.values())
 
 

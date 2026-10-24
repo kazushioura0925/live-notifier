@@ -24,7 +24,7 @@ artists:
   - id: zookaraderu
     name: ズーカラデル
     site: https://gooutzoo.com/
-    feed: https://gooutzoo.com/feed/
+    feed: https://gooutzoo.com/feed
     enabled: true
 
 # ===== 共通の設定 =====

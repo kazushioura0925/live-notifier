@@ -157,22 +157,28 @@ def main():
             print(f"[{artist['name']}] 前回から変更なし")
             continue
 
+        notify = True
         if args.show:
             new_items = items[:args.show]
         elif first_time:
-            # 初回は過去の記事を一斉に通知しないよう、既読にするだけ
+            # 初回は過去の記事を一斉に通知しないよう、既読にするだけ。
+            # ただし、これから始まるチケット受付はリマインドできるように記録する
             print(f"[{artist['name']}] 初回のため、既存の{len(items)}件を既読として記録（通知なし）")
-            new_items = []
+            new_items = items
+            notify = False
         else:
             new_items = [it for it in items if it["id"] not in state["seen"]]
-        print(f"[{artist['name']}] 記事{len(items)}件／新着{len(new_items)}件")
+        if notify:
+            print(f"[{artist['name']}] 記事{len(items)}件／新着{len(new_items)}件")
 
         for item in reversed(new_items):  # 古い順に通知
             info = analyze(item["title"], item["html"], item["published"])
             if settings.get("live_only", True) and not info["is_live"]:
-                print(f"  - スキップ（ライブ関連ではない）: {item['title']}")
+                if notify:
+                    print(f"  - スキップ（ライブ関連ではない）: {item['title']}")
                 continue
-            messages.append(build_message(artist, item, info, now))
+            if notify:
+                messages.append(build_message(artist, item, info, now))
             # まだ始まっていない受付を、リマインド用に記録する
             for s in info["sales"]:
                 if s["start"] <= now:
