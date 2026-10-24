@@ -33,5 +33,8 @@ settings:
   live_only: true
   # サイトへのアクセスの間隔（秒）。サイトに負担をかけないための待ち時間
   wait_seconds: 3
+  # LINEの送り先：me = 自分だけ / friends = ボットの友だち全員（友だちの人数分だけ無料枠を使います）
+  # ※「2日間取得できていません」などの異常のお知らせは、この設定に関係なく自分だけに送ります
+  send_to: friends
   # アクセス時に名乗る名前（サイト管理者が見たときに分かるように）
   user_agent: "LiveNotifier/1.0 (personal fan notification bot)"

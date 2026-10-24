@@ -1,4 +1,5 @@
 # LINE送信テスト：Secretsが正しく登録できているか確かめるため、テストメッセージを1通送る（手動実行のみ）
+# artists.yaml の send_to が friends なら、ボットの友だち全員に届く
 name: LINE送信テスト
 
 on:
@@ -23,4 +24,4 @@ jobs:
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
         run: |
-          python -c "import line_api; line_api.push_texts(['✅ テスト通知\nライブ情報通知ツールからLINEに届きました。設定は正常です。'])"
+          python -c "import yaml, line_api; s = yaml.safe_load(open('artists.yaml', encoding='utf-8'))['settings']; line_api.send_texts(['✅ テスト通知\nライブ情報通知ツールからLINEに届きました。設定は正常です。'], s.get('send_to', 'me'))"

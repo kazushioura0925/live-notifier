@@ -73,6 +73,9 @@ def fetch_feed(artist, state, settings, local_dir=None):
 def parse_feed(xml_bytes):
     """RSSから記事の一覧（新しい順）を取り出す。"""
     root = ET.fromstring(xml_bytes)
+    # メンテナンス画面などRSS以外のページが返ってきたら「取得失敗」として扱う
+    if root.tag != "rss" or root.find("channel") is None:
+        raise ValueError(f"RSSではないページが返ってきました（{root.tag}）")
     items = []
     for item in root.iter("item"):
         link = (item.findtext("link") or "").strip()
@@ -134,7 +137,8 @@ def main():
     if send and not line_api.is_configured():
         sys.exit("LINEの鍵（環境変数）が設定されていません。テストなら --dry-run を付けてください。")
 
-    messages = []
+    messages = []   # 新着通知（send_to の設定に従って送る）
+    alerts = []     # 異常のお知らせ（自分だけに送る）
     artists = [a for a in config["artists"] if a.get("enabled", True)]
     for n, artist in enumerate(artists):
         if n > 0 and not args.local:
@@ -149,7 +153,7 @@ def main():
             state["fail_count"] = state.get("fail_count", 0) + 1
             print(f"[{artist['name']}] 取得失敗（連続{state['fail_count']}回目）: {e}")
             if state["fail_count"] == FAIL_ALERT_COUNT:
-                messages.append(f"⚠️【{artist['name']}】公式サイトの情報を2日間取得できていません。\n"
+                alerts.append(f"⚠️【{artist['name']}】公式サイトの情報を2日間取得できていません。\n"
                                 f"サイトのURL変更やメンテナンスの可能性があります。\n{artist['site']}")
             continue
         state["fail_count"] = 0
@@ -204,15 +208,21 @@ def main():
 
     if args.dry_run:
         print("\n========== LINEに送る予定のメッセージ（テストなので送信しません） ==========")
+        print(f"（送り先: {settings.get('send_to', 'me')}）")
         for m in messages:
             print("\n" + m + "\n" + "-" * 40)
-        if not messages:
+        for m in alerts:
+            print("\n[自分だけに送る] " + m + "\n" + "-" * 40)
+        if not messages and not alerts:
             print("（なし）")
         return
 
     if messages:
-        line_api.push_texts(messages)
+        line_api.send_texts(messages, settings.get("send_to", "me"))
         print(f"LINEに{len(messages)}件送信しました")
+    if alerts:
+        line_api.push_texts(alerts)
+        print(f"異常のお知らせを{len(alerts)}件送信しました")
     save_json(SEEN_FILE, seen_data)
     save_json(SALES_FILE, sales_data)
 

@@ -24,10 +24,13 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import yaml
+
 import line_api
 from extract import JST, fmt_dt
 
 BASE = Path(__file__).resolve().parent
+CONFIG_FILE = BASE / "artists.yaml"
 SALES_FILE = BASE / "data" / "sales.json"
 KEEP_DAYS = 7   # 受付開始から何日たったら記録を消すか
 
@@ -129,7 +132,8 @@ def main():
         return
 
     if messages:
-        line_api.push_texts(messages)
+        settings = yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8"))["settings"]
+        line_api.send_texts(messages, settings.get("send_to", "me"))
         print(f"LINEに{len(messages)}件送信しました")
     if changed:
         sales_file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
