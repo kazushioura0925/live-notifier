@@ -11,6 +11,26 @@
       "sent": [
         "day_before"
       ]
+    },
+    {
+      "id": "humbreaders|https://humbreaders.com/2026/11/01/foreversong_tokuten/|CD予約購入者先行受付 お申し込み期間|2026-11-15T12:00:00+09:00",
+      "artist": "ハンブレッダーズ",
+      "show_title": "ニューシングル『フォーエバーソング』購入特典情報解禁!",
+      "label": "CD予約購入者先行受付 お申し込み期間",
+      "start": "2026-11-15T12:00:00+09:00",
+      "time_known": true,
+      "url": "https://humbreaders.com/2026/11/01/foreversong_tokuten/",
+      "sent": []
+    },
+    {
+      "id": "humbreaders|https://humbreaders.com/2026/11/01/seventeen_ticket/|CD予約購入者先行受付〈抽選|2026-11-15T12:00:00+09:00",
+      "artist": "ハンブレッダーズ",
+      "show_title": "ハンブレッダーズ 結成17周年記念ワンマンツアー”十七歳”",
+      "label": "CD予約購入者先行受付〈抽選",
+      "start": "2026-11-15T12:00:00+09:00",
+      "time_known": true,
+      "url": "https://humbreaders.com/2026/11/01/seventeen_ticket/",
+      "sent": []
     }
   ]
 }
