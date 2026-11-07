@@ -2,6 +2,7 @@
   "artists": {
     "humbreaders": {
       "seen": [
+        "https://humbreaders.com/?p=16442",
         "https://humbreaders.com/?p=16419",
         "https://humbreaders.com/?p=16304",
         "https://humbreaders.com/?p=16297",
@@ -22,12 +23,12 @@
         "http://humbreaders.com/?p=16152"
       ],
       "fail_count": 0,
-      "etag": "\"f82205e64df015bd770711e744fc82db\"",
-      "last_modified": "Fri, 06 Nov 2026 15:49:40 GMT"
+      "etag": "\"411df89866037d94e9d96ab1e79ab859\"",
+      "last_modified": "Sat, 07 Nov 2026 03:00:00 GMT"
     },
     "sleeping_rices": {
       "seen": [],
-      "fail_count": 49
+      "fail_count": 50
     },
     "zookaraderu": {
       "seen": [
