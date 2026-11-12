@@ -29,11 +29,25 @@
       "last_modified": "Thu, 12 Nov 2026 10:35:24 GMT"
     },
     "sleeping_rices": {
-      "seen": [],
-      "fail_count": 64
+      "seen": [
+        "https://sleeping-rices.com/?post_type=news&p=5900",
+        "https://sleeping-rices.com/?post_type=news&p=5909",
+        "https://sleeping-rices.com/?post_type=news&p=5905",
+        "https://sleeping-rices.com/?post_type=news&p=5897",
+        "https://sleeping-rices.com/?post_type=news&p=5892",
+        "https://sleeping-rices.com/?post_type=news&p=5889",
+        "https://sleeping-rices.com/?post_type=news&p=5850",
+        "https://sleeping-rices.com/?post_type=news&p=5831",
+        "https://sleeping-rices.com/?post_type=news&p=5820",
+        "https://sleeping-rices.com/?post_type=news&p=5816"
+      ],
+      "fail_count": 0,
+      "etag": "W/\"86446567e1164ec3076d98e2341e58dc\"",
+      "last_modified": "Thu, 12 Nov 2026 07:02:50 GMT"
     },
     "zookaraderu": {
       "seen": [
+        "https://gooutzoo.com/?p=9860",
         "https://gooutzoo.com/?p=9843",
         "https://gooutzoo.com/?p=9816",
         "https://gooutzoo.com/?p=9771",
@@ -48,8 +62,8 @@
         "https://gooutzoo.com/?p=9584"
       ],
       "fail_count": 0,
-      "etag": "\"7f7a2ca9ff3820e5f89dbde29d537917\"",
-      "last_modified": "Thu, 12 Nov 2026 09:00:15 GMT"
+      "etag": "\"4ea572d80e5a1652cd58ca3740a75fab\"",
+      "last_modified": "Thu, 12 Nov 2026 13:11:38 GMT"
     }
   }
 }
