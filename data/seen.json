@@ -2,6 +2,7 @@
   "artists": {
     "humbreaders": {
       "seen": [
+        "https://humbreaders.com/?p=16462",
         "https://humbreaders.com/?p=16454",
         "https://humbreaders.com/?p=16442",
         "https://humbreaders.com/?p=16419",
@@ -24,15 +25,16 @@
         "http://humbreaders.com/?p=16152"
       ],
       "fail_count": 0,
-      "etag": "\"0f86de294fdba0c3d8006a7bc9c874c8\"",
-      "last_modified": "Wed, 11 Nov 2026 12:51:45 GMT"
+      "etag": "\"d29694ec2ac0d34a10e2ffbb479f1c14\"",
+      "last_modified": "Thu, 12 Nov 2026 10:35:24 GMT"
     },
     "sleeping_rices": {
       "seen": [],
-      "fail_count": 63
+      "fail_count": 64
     },
     "zookaraderu": {
       "seen": [
+        "https://gooutzoo.com/?p=9843",
         "https://gooutzoo.com/?p=9816",
         "https://gooutzoo.com/?p=9771",
         "https://gooutzoo.com/?p=9758",
@@ -46,8 +48,8 @@
         "https://gooutzoo.com/?p=9584"
       ],
       "fail_count": 0,
-      "etag": "\"ba36cde9d8be84fb3ccdf40873ac18b8\"",
-      "last_modified": "Thu, 22 Oct 2026 09:00:23 GMT"
+      "etag": "\"7f7a2ca9ff3820e5f89dbde29d537917\"",
+      "last_modified": "Thu, 12 Nov 2026 09:00:15 GMT"
     }
   }
 }
