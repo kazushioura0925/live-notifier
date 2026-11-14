@@ -27,8 +27,8 @@
         "http://humbreaders.com/?p=16152"
       ],
       "fail_count": 0,
-      "etag": "\"bfa349b27de9ebaf00c6f6da097f30b6\"",
-      "last_modified": "Fri, 13 Nov 2026 11:12:32 GMT"
+      "etag": "\"8c7c93b3f67baa6c8c65a460ad506ea9\"",
+      "last_modified": "Sat, 14 Nov 2026 04:15:17 GMT"
     },
     "sleeping_rices": {
       "seen": [
@@ -43,7 +43,7 @@
         "https://sleeping-rices.com/?post_type=news&p=5820",
         "https://sleeping-rices.com/?post_type=news&p=5816"
       ],
-      "fail_count": 4,
+      "fail_count": 5,
       "etag": "W/\"86446567e1164ec3076d98e2341e58dc\"",
       "last_modified": "Thu, 12 Nov 2026 07:02:50 GMT"
     },
