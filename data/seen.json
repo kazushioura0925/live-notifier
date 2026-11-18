@@ -2,6 +2,7 @@
   "artists": {
     "humbreaders": {
       "seen": [
+        "https://humbreaders.com/?p=16524",
         "https://humbreaders.com/?p=16483",
         "https://humbreaders.com/?p=16492",
         "https://humbreaders.com/?p=16480",
@@ -29,8 +30,8 @@
         "http://humbreaders.com/?p=16152"
       ],
       "fail_count": 0,
-      "etag": "\"130db066d45ff929d31295531265598d\"",
-      "last_modified": "Tue, 17 Nov 2026 11:00:00 GMT"
+      "etag": "\"ac3a629c6675b02a9513f8cf30e9bb12\"",
+      "last_modified": "Wed, 18 Nov 2026 11:00:00 GMT"
     },
     "sleeping_rices": {
       "seen": [
@@ -45,7 +46,7 @@
         "https://sleeping-rices.com/?post_type=news&p=5820",
         "https://sleeping-rices.com/?post_type=news&p=5816"
       ],
-      "fail_count": 2,
+      "fail_count": 3,
       "etag": "W/\"86446567e1164ec3076d98e2341e58dc\"",
       "last_modified": "Thu, 12 Nov 2026 07:02:50 GMT"
     },
