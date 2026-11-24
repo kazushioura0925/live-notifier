@@ -1,20 +1,6 @@
 {
   "sales": [
     {
-      "id": "humbreaders|https://humbreaders.com/2026/11/07/mutsumuro_15days21strokes/|チケット受付|2026-11-17T12:00:00+09:00",
-      "artist": "ハンブレッダーズ",
-      "show_title": "また、ここで。15DAYS21STROKES",
-      "label": "チケット受付",
-      "start": "2026-11-17T12:00:00+09:00",
-      "time_known": true,
-      "url": "https://humbreaders.com/2026/11/07/mutsumuro_15days21strokes/",
-      "sent": [
-        "30min",
-        "day_before",
-        "start"
-      ]
-    },
-    {
       "id": "zookaraderu|https://gooutzoo.com/news/9860.html|一般発売|2026-12-05T12:00:00+09:00",
       "artist": "ズーカラデル",
       "show_title": "O-nest presents “ズーカラデル と ゴリラ祭ーズ”",
