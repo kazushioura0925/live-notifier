@@ -53,7 +53,7 @@
         "https://sleeping-rices.com/?post_type=news&p=5820",
         "https://sleeping-rices.com/?post_type=news&p=5816"
       ],
-      "fail_count": 0,
+      "fail_count": 1,
       "etag": "W/\"8b235353c1ec99d978d4d8f9807bd5d7\"",
       "last_modified": "Tue, 24 Nov 2026 06:35:19 GMT"
     },
@@ -74,7 +74,7 @@
         "https://gooutzoo.com/?p=9614",
         "https://gooutzoo.com/?p=9584"
       ],
-      "fail_count": 0,
+      "fail_count": 1,
       "etag": "\"a2e2d254f7cf5d9a005b2501e1e26999\"",
       "last_modified": "Fri, 13 Nov 2026 09:00:35 GMT"
     }
