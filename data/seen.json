@@ -2,6 +2,7 @@
   "artists": {
     "humbreaders": {
       "seen": [
+        "https://humbreaders.com/?p=16542",
         "https://humbreaders.com/?p=16574",
         "https://humbreaders.com/?p=16562",
         "http://humbreaders.com/?p=16188",
@@ -35,11 +36,12 @@
         "http://humbreaders.com/?p=16152"
       ],
       "fail_count": 0,
-      "etag": "\"f396fd324c4dbe0b96cee0869444bb9c\"",
-      "last_modified": "Fri, 27 Nov 2026 15:17:18 GMT"
+      "etag": "\"ddbaf2d1cd62a4ec654a32a30ac2b44f\"",
+      "last_modified": "Sat, 28 Nov 2026 03:00:00 GMT"
     },
     "sleeping_rices": {
       "seen": [
+        "https://sleeping-rices.com/?post_type=news&p=5922",
         "https://sleeping-rices.com/?post_type=news&p=5900",
         "https://sleeping-rices.com/?post_type=news&p=5909",
         "https://sleeping-rices.com/?post_type=news&p=5905",
@@ -51,9 +53,9 @@
         "https://sleeping-rices.com/?post_type=news&p=5820",
         "https://sleeping-rices.com/?post_type=news&p=5816"
       ],
-      "fail_count": 24,
-      "etag": "W/\"86446567e1164ec3076d98e2341e58dc\"",
-      "last_modified": "Thu, 12 Nov 2026 07:02:50 GMT"
+      "fail_count": 0,
+      "etag": "W/\"8b235353c1ec99d978d4d8f9807bd5d7\"",
+      "last_modified": "Tue, 24 Nov 2026 06:35:19 GMT"
     },
     "zookaraderu": {
       "seen": [
